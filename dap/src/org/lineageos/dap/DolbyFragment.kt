@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022-2024 The LineageOS Project
+ * Copyright (C) 2022 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,17 @@
 package org.lineageos.dap
 
 import android.os.Bundle
-import android.widget.CompoundButton
-import android.widget.CompoundButton.OnCheckedChangeListener
+import android.widget.Switch
 
 import androidx.preference.PreferenceFragment
 
 import com.android.settingslib.widget.MainSwitchPreference
-import com.android.settingslib.widget.SelectorWithWidgetPreference
+import com.android.settingslib.widget.OnMainSwitchChangeListener
+import com.android.settingslib.widget.RadioButtonPreference
 
 import org.lineageos.dap.R
 
-class DolbyFragment : PreferenceFragment(), OnCheckedChangeListener {
+class DolbyFragment : PreferenceFragment(), OnMainSwitchChangeListener {
 
     private lateinit var switchBar: MainSwitchPreference
 
@@ -39,7 +39,7 @@ class DolbyFragment : PreferenceFragment(), OnCheckedChangeListener {
         switchBar.isChecked = DolbyCore.isEnabled()
 
         for ((key, value) in PREF_DOLBY_MODES) {
-            val preference = findPreference<SelectorWithWidgetPreference>(key)!!
+            val preference = findPreference<RadioButtonPreference>(key)!!
             preference.setOnPreferenceClickListener {
                 setProfile(value)
                 true
@@ -47,7 +47,7 @@ class DolbyFragment : PreferenceFragment(), OnCheckedChangeListener {
         }
     }
 
-    override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
+    override fun onSwitchChanged(switchView: Switch, isChecked: Boolean) {
         DolbyCore.setEnabled(isChecked)
     }
 
@@ -55,7 +55,7 @@ class DolbyFragment : PreferenceFragment(), OnCheckedChangeListener {
         DolbyCore.setProfile(profile)
 
         for ((key, value) in PREF_DOLBY_MODES) {
-            val preference = findPreference<SelectorWithWidgetPreference>(key)!!
+            val preference = findPreference<RadioButtonPreference>(key)!!
             preference.isChecked = value == profile
         }
     }
